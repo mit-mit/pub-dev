@@ -142,7 +142,7 @@ Node markdown(
   );
 }
 
-/// Creates DOM elements with <pre> and <code> for HLJS and pub.dev's copy-to-clipboard.
+/// Creates DOM elements with `<pre>` and `<code>` for syntax highlighting and pub.dev's copy-to-clipboard.
 Node codeSnippet({
   required String language,
   String? textToCopy,

@@ -87,6 +87,16 @@ void main() {
 
         await checkHeaderTitle();
         await _checkCopyToClipboard(page);
+        await _checkSyntaxHighlighting(page);
+
+        await page.gotoOrigin('/packages/retry/install');
+        await checkHeaderTitle();
+        expect(
+          await page.$OrNull(
+            'pre.shiki code.language-yaml[data-highlighted="yes"] strong',
+          ),
+          isNotNull,
+        );
 
         await page.gotoOrigin('/packages/retry/versions/3.1.0');
         await checkHeaderTitle();
@@ -165,4 +175,17 @@ Future _checkCopyToClipboard(Page page) async {
   // feedback should not be visible after 2.5 seconds
   await Future.delayed(Duration(milliseconds: 2600));
   expect(await feedbackHandle.isIntersectingViewport, false);
+}
+
+Future<void> _checkSyntaxHighlighting(Page page) async {
+  final dartCode = await page.$OrNull(
+    'pre.shiki code.language-dart[data-highlighted="yes"]',
+  );
+  expect(dartCode, isNotNull);
+
+  final tokenStyle = await page.evaluate<String?>(
+    '''() => document.querySelector('pre.shiki code.language-dart .line > span')?.getAttribute('style')''',
+  );
+  expect(tokenStyle, contains('--shiki-light:'));
+  expect(tokenStyle, contains('--shiki-dark:'));
 }

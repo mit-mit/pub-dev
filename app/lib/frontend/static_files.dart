@@ -91,19 +91,14 @@ class StaticFileCache {
   StaticFileCache.withDefaults() {
     _addDirectory(Directory(resolveStaticDirPath()).absolute);
     final thirdPartyDir = _resolveDir('third_party');
-    _addDirectory(_resolveDir('third_party/highlight'), baseDir: thirdPartyDir);
+    _addDirectory(
+      _resolveDir('third_party/shiki/resources'),
+      baseDir: thirdPartyDir,
+    );
     _addDirectory(_resolveDir('third_party/css'), baseDir: thirdPartyDir);
     _addDirectory(
       _resolveDir('third_party/dartdoc/resources'),
       baseDir: thirdPartyDir,
-    );
-    _joinFiles(
-      path: '/static/highlight/highlight-with-init.js',
-      from: [
-        '/static/highlight/highlight.pack.js',
-        '/static/highlight/init.js',
-      ],
-      contentSeparator: '\n',
     );
   }
 
@@ -167,32 +162,6 @@ class StaticFileCache {
           );
         })
         .forEach(addFile);
-  }
-
-  void _joinFiles({
-    required String path,
-    required List<String> from,
-    String? contentSeparator,
-  }) {
-    final buffer = <int>[];
-    String? contentType;
-    DateTime? lastModified;
-    for (final f in from) {
-      final file = _files[f]!;
-      contentType ??= file.contentType;
-      lastModified ??= file.lastModified;
-      if (lastModified.isBefore(file.lastModified)) {
-        lastModified = file.lastModified;
-      }
-      if (contentSeparator != null && buffer.isNotEmpty) {
-        buffer.addAll(utf8.encode(contentSeparator));
-      }
-      buffer.addAll(file.bytes);
-    }
-    final digest = crypto.sha256.convert(buffer);
-
-    final etag = digest.bytes.map((b) => (b & 31).toRadixString(32)).join();
-    _files[path] = StaticFile(path, contentType!, buffer, lastModified!, etag);
   }
 
   @visibleForTesting

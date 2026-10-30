@@ -119,7 +119,7 @@ String renderLayoutPage(
     landingBlurb: defaultLandingBlurbNode,
     mainClasses: mainClasses,
     mainContent: contentNode,
-    includeHighlightJs: type == PageType.package,
+    includeSyntaxHighlightJs: type == PageType.package,
     schemaOrgSearchActionJson: isRoot ? _schemaOrgSearchAction : null,
     moderationUrl: moderationUrl,
     moderationSubject: moderationSubject,

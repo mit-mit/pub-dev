@@ -26,7 +26,7 @@ d.Node pageLayoutNode({
   required d.Node? landingBlurb,
   required List<String> mainClasses,
   required d.Node mainContent,
-  required bool includeHighlightJs,
+  required bool includeSyntaxHighlightJs,
   required Map<String, dynamic>? schemaOrgSearchActionJson,
   required String? moderationUrl,
   required ModerationSubject? moderationSubject,
@@ -160,11 +160,11 @@ d.Node pageLayoutNode({
                 as: 'image',
               ),
             ],
-            if (includeHighlightJs)
+            if (includeSyntaxHighlightJs)
               d.link(
                 rel: 'preload',
                 href: staticUrls.getAssetUrl(
-                  '/static/highlight/highlight-with-init.js',
+                  '/static/shiki/resources/shiki.js',
                 ),
                 as: 'script',
               ),
@@ -281,11 +281,11 @@ d.Node pageLayoutNode({
               moderationUrl: moderationUrl,
               moderationSubject: moderationSubject,
             ),
-            if (includeHighlightJs)
+            if (includeSyntaxHighlightJs)
               d.fragment([
                 d.script(
                   src: staticUrls.getAssetUrl(
-                    '/static/highlight/highlight-with-init.js',
+                    '/static/shiki/resources/shiki.js',
                   ),
                   defer: true,
                 ),

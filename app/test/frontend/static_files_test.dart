@@ -54,7 +54,7 @@ void main() {
       'github.css',
       () => checkAsset(
         'https://github.com/dart-lang/dartdoc/raw/main/lib/resources/github.css',
-        '/static/highlight/github.css',
+        '/static/dartdoc/resources/github.css',
       ),
       tags: ['sanity'],
     );
@@ -63,7 +63,7 @@ void main() {
       'highlight.pack.js',
       () => checkAsset(
         'https://github.com/dart-lang/dartdoc/raw/main/lib/resources/highlight.pack.js',
-        '/static/highlight/highlight.pack.js',
+        '/static/dartdoc/resources/highlight.pack.js',
       ),
       tags: ['sanity'],
     );
@@ -111,9 +111,9 @@ void main() {
     test('third-party files are copied', () {
       final files = [
         '/static/css/github-markdown.css',
-        '/static/highlight/github.css',
-        '/static/highlight/highlight.pack.js',
-        '/static/highlight/init.js',
+        '/static/shiki/resources/shiki.css',
+        '/static/shiki/resources/shiki.js',
+        '/static/shiki/resources/langs/kotlin.json',
       ];
 
       for (final file in files) {
@@ -172,17 +172,19 @@ void main() {
               (e.endsWith('.part.js') || e.endsWith('.part.js.map')),
         )
         // files that are in the third-party directory but not essential to serving
-        ..removeAll([
-          '/static/css/github-markdown.css-license.txt',
-          '/static/highlight/readme.md',
-        ])
+        ..removeAll(['/static/css/github-markdown.css-license.txt'])
         // third-party CSS files that are included in the style.scss are no longer referenced elsewhere
         ..removeAll([
           '/static/css/dartdoc-github-alert.css',
           '/static/css/github-markdown.css',
-          '/static/highlight/github.css',
-          '/static/highlight/github-dark.css',
+          '/static/shiki/resources/shiki.css',
         ])
+        // Shiki secondary language grammars loaded dynamically at runtime
+        ..removeWhere(
+          (e) =>
+              e.startsWith('/static/shiki/resources/langs/') &&
+              e.endsWith('.json'),
+        )
         // dartdoc files included through dartdoc.scss
         ..removeAll([
           '/static/dartdoc/resources/github.css',

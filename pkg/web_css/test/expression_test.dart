@@ -74,8 +74,7 @@ void main() {
       // remove third-party css expressions
       final thirdPartyCss = [
         '../../third_party/css/github-markdown.css',
-        '../../third_party/highlight/github.css',
-        '../../third_party/highlight/github-dark.css',
+        '../../third_party/shiki/resources/shiki.css',
       ];
       for (final path in thirdPartyCss) {
         expressions.removeAll((await _visitCssFile(path)).expressions);
